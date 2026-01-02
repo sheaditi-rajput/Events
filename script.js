@@ -1,128 +1,118 @@
-:root {
-  --bg: #f2f2f2;          /* Soft grey background */
-  --text: #2b2b2b;        /* Dark text */
-  --muted: #6b6b6b;       /* Muted text */
-  --wine: #722f37;        /* Headings */
-  --rose: #b76e79;        /* Accents */
-  --white: #ffffff;
-  --card: #ffffff;
-  --border: #e0e0e0;
+// Mobile navigation toggle
+const toggle = document.querySelector('.nav-toggle');
+const nav = document.querySelector('.site-nav');
+if (toggle && nav) toggle.addEventListener('click', () => nav.classList.toggle('open'));
+
+// Smooth nav active switch + scroll
+document.querySelectorAll('.site-nav a[href^="#"]').forEach(link => {
+  link.addEventListener('click', e => {
+    const targetId = link.getAttribute('href').slice(1);
+    const target = document.getElementById(targetId);
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      document.querySelectorAll('.site-nav a').forEach(a => a.classList.remove('active'));
+      link.classList.add('active');
+      nav.classList.remove('open');
+    }
+  });
+});
+
+// Dynamic year
+document.getElementById('year').textContent = new Date().getFullYear();
+
+// Frontend booking storage and share links
+const PAYMENT_LINK_URL = 'https://razorpay.com/payment-link/your-link-here'; // TODO: paste your payment link
+const businessPhone = '9717747917';
+const businessEmail = 'khushalpratap655@gmail.com';
+
+const form = document.getElementById('booking-form');
+const confirmBox = document.getElementById('confirm');
+const payLink = document.getElementById('pay-link');
+const shareWhatsAppBtn = document.getElementById('share-whatsapp');
+const shareEmailBtn = document.getElementById('share-email');
+
+// Initialize pay link
+if (payLink) {
+  payLink.href = PAYMENT_LINK_URL;
 }
 
-* { box-sizing: border-box; }
-html, body { margin: 0; padding: 0; }
-body {
-  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans";
-  color: var(--text);
-  background: var(--bg);
-  line-height: 1.6;
+function formatBooking(details) {
+  return [
+    `New Booking - Aditi Events`,
+    `Name: ${details.name}`,
+    `Email: ${details.email}`,
+    `Phone: ${details.phone}`,
+    `Event: ${details.eventType}`,
+    `Date & Time: ${details.datetime}`,
+    `Location: ${details.location}`,
+    `Amount (INR): ${details.amount || '—'}`,
+    `Requests: ${details.requests || '—'}`
+  ].join('\n');
 }
 
-/* Typography */
-h1, h2, h3 {
-  font-family: "Playfair Display", serif;
-  color: var(--wine);
-  margin: 0 0 12px;
+function saveBooking(details) {
+  const existing = JSON.parse(localStorage.getItem('aditi_bookings') || '[]');
+  existing.push({ ...details, createdAt: new Date().toISOString() });
+  localStorage.setItem('aditi_bookings', JSON.stringify(existing));
 }
 
-/* Utilities */
-.container { max-width: 1100px; margin: 0 auto; padding: 0 16px; }
-.btn {
-  display: inline-block; padding: 10px 16px; border-radius: 8px;
-  border: 1px solid var(--rose); color: var(--white); background: var(--rose);
-  text-decoration: none; transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-.btn:hover { transform: translateY(-1px); box-shadow: 0 6px 14px rgba(183, 110, 121, 0.25); }
-.btn.primary { background: var(--rose); border-color: var(--rose); }
-.btn.accent { background: transparent; color: var(--rose); border-color: var(--rose); }
-.btn.accent:hover { background: var(--rose); color: var(--white); }
+form?.addEventListener('submit', (e) => {
+  e.preventDefault();
 
-/* Header */
-.site-header {
-  position: sticky; top: 0; z-index: 50;
-  backdrop-filter: saturate(180%) blur(8px);
-  background: rgba(255, 255, 255, 0.8);
-  border-bottom: 1px solid var(--border);
-}
-.header-wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; }
-.brand {
-  font-family: "Playfair Display", serif; font-weight: 700; color: var(--wine);
-  text-decoration: none; letter-spacing: 0.4px;
-}
-.site-nav ul { list-style: none; margin: 0; padding: 0; display: flex; gap: 16px; }
-.site-nav a { color: var(--text); text-decoration: none; padding: 8px 10px; border-radius: 8px; }
-.site-nav a.active, .site-nav a:hover { background: var(--card); border: 1px solid var(--border); }
+  const details = {
+    name: document.getElementById('name').value.trim(),
+    email: document.getElementById('email').value.trim(),
+    phone: document.getElementById('phone').value.trim(),
+    eventType: document.getElementById('eventType').value,
+    datetime: document.getElementById('datetime').value,
+    location: document.getElementById('location').value.trim(),
+    requests: document.getElementById('requests').value.trim(),
+    amount: document.getElementById('amount').value.trim()
+  };
 
-/* Mobile nav toggle */
-.nav-toggle { display: none; background: transparent; border: 0; cursor: pointer; }
-.nav-toggle .bar { display: block; width: 24px; height: 2px; background: var(--wine); margin: 5px 0; }
+  // Basic validation
+  if (!details.name || !details.email || !details.phone || !details.eventType || !details.datetime || !details.location) {
+    alert('Please fill all required fields.');
+    return;
+  }
 
-/* Hero */
-.hero {
-  padding: 96px 0 64px;
-  background:
-    radial-gradient(800px 300px at 20% 0%, rgba(183, 110, 121, 0.18), transparent 60%),
-    radial-gradient(600px 300px at 80% 10%, rgba(114, 47, 55, 0.18), transparent 60%);
-  border-bottom: 1px solid var(--border);
-  text-align: center;
-}
-.hero h1 { font-size: 2.6rem; }
-.hero p { color: var(--muted); max-width: 720px; margin: 0 auto 24px; }
+  saveBooking(details);
 
-/* Sections */
-.section { padding: 64px 0; }
-.section.alt {
-  background: linear-gradient(180deg, #ffffff, #f8f8f8);
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-}
+  const message = formatBooking(details)
+    .replace(/\n/g, '<br/>');
 
-/* Services grid */
-.grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 24px; }
-.card.service {
-  background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px;
-  transition: border-color 0.2s ease, transform 0.2s ease;
-}
-.card.service h3 { color: var(--wine); }
-.card.service:hover { border-color: var(--rose); transform: translateY(-2px); }
+  confirmBox.classList.remove('hidden');
+  confirmBox.innerHTML = `
+    <strong>Booking saved (locally):</strong><br/>
+    ${message}<br/><br/>
+    <a class="btn accent" href="${PAYMENT_LINK_URL}" target="_blank" rel="noopener">Pay now</a>
+  `;
 
-/* Forms */
-.booking-form, .contact-form { max-width: 780px; }
-.form-row { display: flex; flex-direction: column; margin-bottom: 16px; }
-.form-row label { font-weight: 600; color: var(--wine); margin-bottom: 6px; }
-.form-row input, .form-row select, .form-row textarea {
-  background: #fff; color: var(--text);
-  border: 1px solid var(--border); border-radius: 10px; padding: 10px;
-}
-.form-row input:focus, .form-row select:focus, .form-row textarea:focus {
-  outline: 2px solid rgba(183, 110, 121, 0.4);
-}
-.form-hint { color: var(--muted); font-size: 0.9rem; }
+  // Optionally scroll to confirmation
+  confirmBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
 
-.actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 6px; }
+// Share via WhatsApp
+shareWhatsAppBtn?.addEventListener('click', () => {
+  const bookings = JSON.parse(localStorage.getItem('aditi_bookings') || '[]');
+  const latest = bookings[bookings.length - 1];
+  if (!latest) return alert('No booking found. Please submit the form first.');
 
-.confirm { margin-top: 16px; padding: 14px; border: 1px solid var(--rose); border-radius: 12px; background: #fff; }
-.confirm.hidden { display: none; }
+  const text = encodeURIComponent(formatBooking(latest));
+  // Direct chat link (user will choose contact inside WhatsApp)
+  const url = `https://wa.me/${businessPhone}?text=${text}`;
+  window.open(url, '_blank', 'noopener');
+});
 
-/* Contact */
-.contact-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
-.map-embed iframe { width: 100%; height: 280px; border: 0; border-radius: 12px; }
+// Share via Email
+shareEmailBtn?.addEventListener('click', () => {
+  const bookings = JSON.parse(localStorage.getItem('aditi_bookings') || '[]');
+  const latest = bookings[bookings.length - 1];
+  if (!latest) return alert('No booking found. Please submit the form first.');
 
-/* Footer */
-.site-footer { padding: 24px 0; border-top: 1px solid var(--border); background: #fff; }
-.footer-wrap { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
-.footer-wrap p { margin: 0; color: var(--muted); }
-.socials a { color: var(--rose); text-decoration: none; margin-left: 12px; }
-.socials a:hover { text-decoration: underline; }
-
-/* Responsive */
-@media (max-width: 1000px) { .grid { grid-template-columns: 1fr 1fr; } }
-@media (max-width: 640px) {
-  .site-nav { display: none; }
-  .nav-toggle { display: block; }
-  .site-nav.open { display: block; }
-  .site-nav ul { flex-direction: column; gap: 8px; padding: 12px 0; }
-  .grid { grid-template-columns: 1fr; }
-  .hero h1 { font-size: 2.2rem; }
-  .contact-columns { grid-template-columns: 1fr; }
-}
+  const subject = encodeURIComponent('New Booking - Aditi Events');
+  const body = encodeURIComponent(formatBooking(latest));
+  const mailto = `mailto:${businessEmail}?subject=${subject}&body=${body}`;
+  window.location.href = mailto;
+});
