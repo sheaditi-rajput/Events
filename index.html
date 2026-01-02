@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Aditi Events | Turning Moments into Memories</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container header-wrap">
+      <a href="#" class="brand">Aditi Events</a>
+      <button class="nav-toggle" aria-label="Toggle navigation">
+        <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+      </button>
+      <nav class="site-nav">
+        <ul>
+          <li><a href="#home" class="active">Home</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#booking" class="btn accent">Book Now</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section id="home" class="hero">
+    <div class="container hero-content">
+      <h1>Turning Moments into Memories</h1>
+      <p>Weddings, birthdays, proposal setups, and bespoke celebrations — curated with elegance and care.</p>
+      <a href="#booking" class="btn primary">Book Your Event</a>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section id="services" class="section">
+    <div class="container">
+      <h2>Our services</h2>
+      <div class="grid">
+        <div class="card service">
+          <h3>Weddings</h3>
+          <p>From intimate ceremonies to grand receptions — planning, decor, logistics, and on-day coordination.</p>
+        </div>
+        <div class="card service">
+          <h3>Birthday parties</h3>
+          <p>Themes, venue setup, entertainment, and delightful details to celebrate every age and style.</p>
+        </div>
+        <div class="card service">
+          <h3>Proposal setups</h3>
+          <p>Personalized proposals with florals, lighting, and surprises tailored to your story.</p>
+        </div>
+        <div class="card service">
+          <h3>Corporate events</h3>
+          <p>Brand launches, offsites, award nights — polished experiences that reflect your organization.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Booking -->
+  <section id="booking" class="section alt">
+    <div class="container">
+      <h2>Book your event</h2>
+      <form id="booking-form" class="booking-form">
+        <div class="form-row">
+          <label for="name">Name</label>
+          <input id="name" name="name" type="text" placeholder="Your full name" required/>
+        </div>
+        <div class="form-row">
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" placeholder="your@email.com" required/>
+        </div>
+        <div class="form-row">
+          <label for="phone">Phone</label>
+          <input id="phone" name="phone" type="tel" placeholder="9717747917" required/>
+        </div>
+        <div class="form-row">
+          <label for="eventType">Event type</label>
+          <select id="eventType" name="eventType" required>
+            <option value="Wedding">Wedding</option>
+            <option value="Birthday Party">Birthday Party</option>
+            <option value="Proposal Setup">Proposal Setup</option>
+            <option value="Corporate Event">Corporate Event</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label for="datetime">Date & time</label>
+          <input id="datetime" name="datetime" type="datetime-local" required/>
+        </div>
+        <div class="form-row">
+          <label for="location">Location</label>
+          <input id="location" name="location" type="text" placeholder="Event address with city" required/>
+        </div>
+        <div class="form-row">
+          <label for="requests">Special requests</label>
+          <textarea id="requests" name="requests" rows="4" placeholder="Themes, budget range, decor preferences"></textarea>
+        </div>
+        <div class="form-row">
+          <label for="amount">Booking amount (INR)</label>
+          <input id="amount" name="amount" type="number" min="1000" step="100" placeholder="e.g., 5000"/>
+        </div>
+
+        <div class="actions">
+          <button type="submit" class="btn primary">Proceed</button>
+          <a id="pay-link" class="btn accent" href="#" target="_blank" rel="noopener">Pay now</a>
+        </div>
+        <p class="form-hint">Payments use a secure external link. We’ll store your booking locally in your browser.</p>
+      </form>
+
+      <div id="confirm" class="confirm hidden" aria-live="polite"></div>
+
+      <div class="share-wrap">
+        <button id="share-whatsapp" class="btn accent">Share details on WhatsApp</button>
+        <button id="share-email" class="btn accent">Share details by Email</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" class="section">
+    <div class="container">
+      <h2>Contact</h2>
+      <div class="contact-columns">
+        <div>
+          <p><strong>Phone:</strong> 9717747917</p>
+          <p><strong>Email:</strong> khushalpratap655@gmail.com</p>
+          <p><strong>Location:</strong> Sadar, Uttar Pradesh, India</p>
+        </div>
+        <form class="contact-form" onsubmit="alert('Thanks! We will reach out soon.'); return false;">
+          <div class="form-row">
+            <label for="cname">Name</label>
+            <input id="cname" type="text" placeholder="Your name" required/>
+          </div>
+          <div class="form-row">
+            <label for="cemail">Email</label>
+            <input id="cemail" type="email" placeholder="your@email.com" required/>
+          </div>
+          <div class="form-row">
+            <label for="cmsg">Message</label>
+            <textarea id="cmsg" rows="4" placeholder="How can we help?" required></textarea>
+          </div>
+          <button class="btn accent" type="submit">Send</button>
+        </form>
+      </div>
+      <div class="map-embed">
+        <iframe title="Map" src="https://www.google.com/maps?q=Sadar,Uttar%20Pradesh&output=embed" loading="lazy"></iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-wrap">
+      <p>© <span id="year"></span> Aditi Events. All rights reserved.</p>
+      <div class="socials">
+        <a href="#" aria-label="Instagram">Instagram</a>
+        <a href="#" aria-label="Facebook">Facebook</a>
+        <a href="#" aria-label="WhatsApp">WhatsApp</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
